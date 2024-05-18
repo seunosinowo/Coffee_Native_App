@@ -1,10 +1,11 @@
-import { StatusBar, StyleSheet, Text, View, ScrollView, Touchable, TouchableOpacity, TextInput } from 'react-native'
+import { StatusBar, StyleSheet, Text, View, ScrollView, Touchable, TouchableOpacity, TextInput, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import { useStore } from '../store/store'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE, SPACING } from '../theme/theme';
 import HeaderBar from '../components/HeaderBar';
 import CustomIcon from '../components/CustomIcon';
+import CoffeeCard from '../components/CoffeeCard';
 
 
 const getCategoriesFromData = (data: any) => {
@@ -46,6 +47,7 @@ const HomeScreen = () => {
   )
 
   const tabBarHeight = useBottomTabBarHeight();
+  //console.log("sorted coffee = ", sortedCoffee.length)
 
   
   return (
@@ -99,7 +101,7 @@ const HomeScreen = () => {
                         onPress = {() => {
                           setCategoryIndex({index: index, category: categories[index]})
                           setSortedCoffee([
-                            ...getCoffeeList(categories[index],CoffeeList)])
+                            ...getCoffeeList(categories[index],CoffeeList)]);
                         }}>
                     <Text
                       style = {[
@@ -120,6 +122,37 @@ const HomeScreen = () => {
               </View>
           ))}
         </ScrollView>
+
+          {/* Coffee FlatList */}
+          <FlatList 
+              horizontal
+              showsHorizontalScrollIndicator = {false}
+              data = {sortedCoffee}
+              contentContainerStyle = {styles.FlatListContainer}
+              keyExtractor = {item => item.id}
+              renderItem = {({item}) => {
+                return (
+                      <TouchableOpacity>
+                          <CoffeeCard 
+                              id = {item.id}
+                              index = {item.index}
+                              type = {item.type}
+                              rosted = {item.rosted}
+                              imagelink_square = {item.imagelink_square}
+                              name = {item.name}
+                              special_ingredient = {item.special_ingredient}
+                              average_rating = {item.average_rating}
+                              price = {item.price}
+                              buttonPressHandler = {() => {}}
+                          />
+                      </TouchableOpacity>
+                )}}
+          />
+
+          {/* Beans FlatList */}
+
+
+
       </ScrollView>
     </View>
   )
@@ -187,7 +220,10 @@ const styles = StyleSheet.create({
     width: SPACING.space_10,
     borderRadius: BORDERRADIUS.radius_10,
     backgroundColor: COLORS.primaryOrangeHex,
+  },
 
+  FlatListContainer: {
+    gap: SPACING.space_20,
   },
 
 
