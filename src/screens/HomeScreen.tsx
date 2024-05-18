@@ -28,6 +28,7 @@ const getCoffeeList = (category: string, data: any ) => {
     return data;
   } else{
     let coffeelist = data.filter((item: any) => item.name == category);
+    return coffeelist;
   };
 };
 
@@ -43,11 +44,11 @@ const HomeScreen = () => {
     category: categories[1],
   });
   const [sortedCoffee, setSortedCoffee] = useState(
-    getCoffeeList(categoryIndex.category, CoffeeList)
-  )
+    getCoffeeList(categoryIndex.category, CoffeeList),
+  ); 
 
   const tabBarHeight = useBottomTabBarHeight();
-  //console.log("sorted coffee = ", sortedCoffee.length)
+  console.log("sorted coffee = ", sortedCoffee.length)
 
   
   return (
@@ -85,9 +86,10 @@ const HomeScreen = () => {
             style = {styles.TextInputContainer}
           />
         </View>
-
+ 
         {/* Category Scroller */}
-        <ScrollView horizontal
+        <ScrollView 
+          horizontal
           showsHorizontalScrollIndicator = {false}
           contentContainerStyle = {styles.CategoryScrollViewStyle}>
 
@@ -99,9 +101,10 @@ const HomeScreen = () => {
                 <TouchableOpacity 
                         style = {styles.CategoryScroolViewItem}
                         onPress = {() => {
-                          setCategoryIndex({index: index, category: categories[index]})
+                          setCategoryIndex({index: index, category: categories[index]});
                           setSortedCoffee([
-                            ...getCoffeeList(categories[index],CoffeeList)]);
+                            ...getCoffeeList(categories[index],CoffeeList),
+                          ]);
                         }}>
                     <Text
                       style = {[

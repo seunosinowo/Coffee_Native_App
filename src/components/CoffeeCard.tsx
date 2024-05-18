@@ -1,7 +1,7 @@
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import LinearGradient from 'react-native-linear-gradient';
-import { COLORS } from '../theme/theme';
+import { BORDERRADIUS, COLORS, SPACING } from '../theme/theme';
 
 const CARD_WIDTH = Dimensions.get('window').width * 0.32;
 
@@ -36,6 +36,11 @@ const CoffeeCard: React.FC<CoffeeCardProps> = ({
         end = {{x: 1, y: 1}}
         style = {styles.CardLinearGradientContainer}
         colors = {[COLORS.primaryGreyHex, COLORS.primaryBlackHex]}>
+          <ImageBackground 
+              source = {imagelink_square} 
+              style = {styles.CardImageBG}
+              resizeMode = 'cover'
+              ></ImageBackground>
     </LinearGradient>
   )
 }
@@ -47,5 +52,15 @@ const styles = StyleSheet.create({
 
   CardLinearGradientContainer: {
 
-  }
+  },
+
+  CardImageBG: {
+      width: CARD_WIDTH,
+      height: CARD_WIDTH,
+      borderRadius: BORDERRADIUS.radius_20,
+      marginBottom: SPACING.space_15,
+      overflow: 'hidden',
+
+  },
+
 })
