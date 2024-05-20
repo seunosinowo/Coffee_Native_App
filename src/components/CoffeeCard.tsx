@@ -1,7 +1,9 @@
-import { Dimensions, ImageBackground, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, ImageBackground, ImageProps, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import LinearGradient from 'react-native-linear-gradient';
-import { BORDERRADIUS, COLORS, SPACING } from '../theme/theme';
+import { BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE, SPACING } from '../theme/theme';
+import CustomIcon from './CustomIcon';
+import BGIcon from './BGIcon';
 
 const CARD_WIDTH = Dimensions.get('window').width * 0.32;
 
@@ -10,7 +12,7 @@ interface CoffeeCardProps {
     index: number;
     type: string;
     rosted: string;
-    imagelink_square: string;
+    imagelink_square: ImageProps;
     name: string;
     special_ingredient: string;
     average_rating: number;
@@ -37,10 +39,38 @@ const CoffeeCard: React.FC<CoffeeCardProps> = ({
         style = {styles.CardLinearGradientContainer}
         colors = {[COLORS.primaryGreyHex, COLORS.primaryBlackHex]}>
           <ImageBackground 
-              source = {imagelink_square} 
+             source = {imagelink_square} 
               style = {styles.CardImageBG}
-              resizeMode = 'cover'
-              ></ImageBackground>
+              resizeMode = 'cover'>
+                <View style = {styles.CardRatingContainer}>
+                    <CustomIcon
+                        name = 'star'
+                        color = {COLORS.primaryOrangeHex}
+                        size = {FONTSIZE.size_18}
+                    />
+                    <Text style = {styles.CardRatingText}>{average_rating}</Text>
+                </View>
+                </ImageBackground>
+
+                <Text style = {styles.CardTitle}>{name}</Text>
+                <Text style = {styles.CardSubtitle}>{special_ingredient}</Text>
+
+                <View style = {styles.CardFooterRow}>
+                  <Text style = {styles.CardPriceCurrency}>
+                      $ <Text style = {styles.CardPrice}>{price.price}</Text>
+                  </Text>
+ 
+                  <TouchableOpacity onPress = {() => {}}>
+                      <BGIcon 
+                          color = {COLORS.primaryWhiteHex} 
+                          name = {'add'} 
+                          BGColor = {COLORS.primaryOrangeHex}
+                          size = {FONTSIZE.size_16}
+                      />
+                  </TouchableOpacity> 
+                </View>
+
+              
     </LinearGradient>
   )
 }
@@ -51,7 +81,8 @@ export default CoffeeCard
 const styles = StyleSheet.create({
 
   CardLinearGradientContainer: {
-
+      padding: SPACING.space_15,
+      borderRadius: BORDERRADIUS.radius_15,
   },
 
   CardImageBG: {
@@ -62,5 +93,56 @@ const styles = StyleSheet.create({
       overflow: 'hidden',
 
   },
+
+  CardRatingContainer: {
+    flexDirection: 'row',
+    backgroundColor: COLORS.primaryBlackRGBA,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: SPACING.space_10,
+    paddingHorizontal: SPACING.space_15,
+    position: 'absolute',
+    borderBottomLeftRadius: BORDERRADIUS.radius_20,
+    borderBottomRightRadius: BORDERRADIUS.radius_20,
+    top: 0,
+    right: 0,
+  },
+
+  CardRatingText: {
+    fontFamily: FONTFAMILY.poppins_medium,
+    color: COLORS.primaryWhiteHex,
+    lineHeight: 22,
+    fontSize: FONTSIZE.size_14,
+
+  },
+
+  CardFooterRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  CardTitle: {
+    fontFamily: FONTFAMILY.poppins_medium,
+    color: COLORS.primaryWhiteHex,
+    fontSize: FONTSIZE.size_16,
+    marginTop: SPACING.space_15,
+  },
+
+  CardSubtitle: {
+    fontFamily: FONTFAMILY.poppins_light,
+    color: COLORS.primaryWhiteHex,
+    fontSize: FONTSIZE.size_10,
+  },
+
+  CardPriceCurrency: {
+    fontFamily: FONTFAMILY.poppins_semibold,
+    color: COLORS.primaryOrangeHex,
+    fontSize: FONTSIZE.size_18,
+  },
+
+  CardPrice: {
+    color: COLORS.primaryWhiteHex,
+  }
 
 })
