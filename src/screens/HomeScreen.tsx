@@ -191,7 +191,11 @@ const HomeScreen = ({navigation}: any) => {
               renderItem = {({item}) => {
                 return (
                       <TouchableOpacity onPress = {() => {
-                          navigation.push('DetailsScreen')
+                          navigation.push('DetailsScreen', {
+                            index: item.index,
+                            id: item.id,
+                            type: item.type,
+                          })
                       }}>
                           <CoffeeCard 
                               id = {item.id}
@@ -226,7 +230,11 @@ const HomeScreen = ({navigation}: any) => {
               renderItem = {({item}) => {
                 return (
                       <TouchableOpacity onPress = {() => {
-                          navigation.push('DetailsScreen')
+                        navigation.push('DetailsScreen', {
+                          index: item.index,
+                          id: item.id,
+                          type: item.type,
+                        })
                       }}>
                           <CoffeeCard 
                               id = {item.id}
