@@ -92,9 +92,7 @@ const HomeScreen = ({navigation}: any) => {
         
         {/* Search Input */}
         <View style = {styles.InputContainerComponent}>
-          <TouchableOpacity onPress = {() => {
-            searchCoffee(searchText)
-          }}>
+          
               <CustomIcon 
                   style = {styles.InputIcon}
                   name = 'search'
@@ -106,11 +104,13 @@ const HomeScreen = ({navigation}: any) => {
                   }
               />
 
-          </TouchableOpacity>
           <TextInput 
             placeholder='Find Your Coffee '
             value = {searchText}
-            onChangeText = {text => setSearchText(text)}
+            onChangeText = {text => {
+              setSearchText(text)
+              searchCoffee(text)
+            }}
             placeholderTextColor = {COLORS.primaryLightGreyHex}
             style = {styles.TextInputContainer}
           />
