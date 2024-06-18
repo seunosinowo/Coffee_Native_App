@@ -1,5 +1,8 @@
-import { ImageProps, StyleSheet, Text, View, ImageBackground } from 'react-native'
+import { ImageProps, StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { COLORS, FONTSIZE, SPACING } from '../theme/theme';
+import CustomIcon from './CustomIcon';
+import GradientBGIcon from './GradientBGIcon';
 
 interface ImageBackgroundInfoProps {
     EnableBackHandler: boolean;
@@ -32,28 +35,79 @@ const ImageBackgroundInfo: React.FC<ImageBackgroundInfoProps> = ({
     BackHandler,
     ToggleFavourite,
 }) => {
-  return (
-    <View>
-      <ImageBackground 
-            source = {imagelink_portrait}
-            style = {styles.ItemBackgroundImage}
-            >
-        </ImageBackground>
-        <Text  style = {styles.Ite}>ghfdfghj</Text>
-    </View>
-  )
-}
+    return(
+        <View>
+            <ImageBackground
+                source = {imagelink_portrait}
+                style = {styles.ItemBackgroundImage}>
+
+                {EnableBackHandler ? (
+                    <View style = {styles.ImageHeaderBarContainerWithBack}>
+                        <TouchableOpacity onPress = {() => {
+                            BackHandler()
+                        }}>
+                            <GradientBGIcon 
+                                name = 'left'
+                                color = {COLORS.primaryLightGreyHex}
+                                size = {FONTSIZE.size_16}
+                            />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress = {() => {
+                            ToggleFavourite(favourite, type, id);
+                        }}>
+                            <GradientBGIcon 
+                                name = 'like'
+                                color = {
+                                    favourite ? COLORS.primaryRedHex : COLORS.primaryLightGreyHex
+                                }
+                                size = {FONTSIZE.size_16}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                ): (
+                    <View style = {styles.ImageHeaderBarContainerWithoutBack}>
+                        
+                        <TouchableOpacity onPress = {() => {
+                            ToggleFavourite(favourite, type, id)
+                        }}>
+                            <GradientBGIcon 
+                                name = 'like'
+                                color = {
+                                    favourite ? COLORS.primaryRedHex : COLORS.primaryLightGreyHex
+                                }
+                                size = {FONTSIZE.size_16}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                )}
+
+            </ImageBackground>
+        </View>
+    )
+     
+};
 
 const styles = StyleSheet.create({
+
     ItemBackgroundImage: {
         width: '100%',
         aspectRatio: 20 / 25,
-        justifyContent: "space-between"
+        justifyContent: 'space-between',
     },
 
-    Ite: {
-        color: '#fff',
-    }
+    ImageHeaderBarContainerWithBack: {
+        padding: SPACING.space_30,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+
+    ImageHeaderBarContainerWithoutBack: {
+
+    },
+
+    
 })
 
 export default ImageBackgroundInfo
