@@ -12,7 +12,7 @@ interface ImageBackgroundInfoProps {
     favourite: boolean;
     name: string;
     special_ingredient: string;
-    ingredient: string;
+    ingredients: string;
     average_rating: number;
     ratings_count: string;
     roasted: string;
@@ -28,7 +28,7 @@ const ImageBackgroundInfo: React.FC<ImageBackgroundInfoProps> = ({
     favourite,
     name,
     special_ingredient,
-    ingredient,
+    ingredients,
     average_rating,
     ratings_count,
     roasted,
@@ -118,14 +118,25 @@ const ImageBackgroundInfo: React.FC<ImageBackgroundInfoProps> = ({
                                         size = {FONTSIZE.size_16}
                                         color = {COLORS.primaryOrangeHex}
                                     />
-                                    <Text style = {styles.PropertyTextFirst}>{type}</Text>
-                                    
-
+                                    <Text style = {styles.PropertyTextLast}>{ingredients}</Text>
                                 </View>
-                            
-
                             </View>
                         </View>
+                            <View style = {styles.InfoContainerRow}>
+                                <View style = {styles.RatingContainer}>
+                                    <CustomIcon 
+                                        name = {'star'}
+                                        color = {COLORS.primaryOrangeHex}
+                                        size = {FONTSIZE.size_20}
+                                    />
+                                    <Text style = {styles.RatingText}>{average_rating}</Text>
+                                    <Text style = {styles.RatingCountText}>({ratings_count})</Text>
+                                </View>
+
+                                <View style = {styles.RoastedContainer}>
+                                    <Text style = {styles.RoastedText}>{roasted}</Text>
+                                </View>
+                            </View>
                     </View>
                 </View>
 
@@ -206,10 +217,48 @@ const styles = StyleSheet.create({
         fontFamily: FONTFAMILY.poppins_medium,
         color: COLORS.primaryWhiteHex,
         fontSize: FONTSIZE.size_10,
-
     },
 
-    
+    PropertyTextLast: {
+        fontFamily: FONTFAMILY.poppins_medium,
+        color: COLORS.primaryWhiteHex,
+        fontSize: FONTSIZE.size_10,
+        marginTop: SPACING.space_2 + SPACING.space_2,
+    },
+
+    RatingContainer: {
+        flexDirection: 'row',
+        gap: SPACING.space_10,
+        alignItems: 'center',
+    },
+
+    RatingText: {
+        fontFamily: FONTFAMILY.poppins_semibold,
+        color: COLORS.primaryWhiteHex,
+        fontSize: FONTSIZE.size_18,
+    },
+
+    RatingCountText: {
+        fontFamily: FONTFAMILY.poppins_regular,
+        color: COLORS.primaryWhiteHex,
+        fontSize: FONTSIZE.size_12,
+    },
+
+    RoastedContainer: {
+        backgroundColor: COLORS.primaryBlackHex,
+        height: 55,
+        width: 55 * 2 + SPACING.space_20,
+        borderRadius: BORDERRADIUS.radius_15,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    RoastedText: {
+        color: COLORS.primaryWhiteHex,
+        fontFamily: FONTFAMILY.poppins_regular,
+        fontSize: FONTSIZE.size_12,
+    },
+
 });
 
 export default ImageBackgroundInfo;

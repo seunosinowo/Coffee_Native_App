@@ -1,17 +1,23 @@
-import { StatusBar, StyleSheet, Text, View } from 'react-native'
+import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { useStore } from '../store/store'
-import { COLORS } from '../theme/theme';
+import { BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE, SPACING } from '../theme/theme';
 import { ScrollView } from 'react-native';
 import ImageBackgroundInfo from '../components/ImageBackgroundInfo';
+import { TouchableWithoutFeedback } from 'react-native';
+import PaymentFooter from '../components/PaymentFooter';
 
 const DetailsScreen = ({navigation, route}: any) => {
   const ItemOfIndex = useStore((state: any) =>
-    route.params.type == 'Coffee' ? state.CoffeeList : state.BeanList,
-    )[route.params.index];
+  route.params.type == 'Coffee' ? state.CoffeeList : state.BeanList,
+  )[route.params.index];
 
-    const addToFavoriteList = useStore((state: any) => state.addToFavoriteList);
-    const deleteFromFavoriteList = useStore((state: any) => state.deleteFromFavoriteList)
+  const addToFavoriteList = useStore((state: any) => state.addToFavoriteList);
+  const deleteFromFavoriteList = useStore((state: any) => state.deleteFromFavoriteList)
+
+  const [fullDesc, setfullDesc] = useState(false);
+
+  const [price, setPrice] = useState(ItemOfIndex.prices[0]); 
 
   const BackHandler = () => {
     navigation.pop();
@@ -37,12 +43,81 @@ const DetailsScreen = ({navigation, route}: any) => {
               favourite = {ItemOfIndex.favourite}
               name = {ItemOfIndex.name}
               special_ingredient = {ItemOfIndex.special_ingredient}
-              ingredient = {ItemOfIndex.ingredient}
+              ingredients = {ItemOfIndex.ingredients}
               average_rating = {ItemOfIndex.average_rating }
               ratings_count = {ItemOfIndex.ratings_count}
               roasted = {ItemOfIndex.roasted}
               BackHandler = {BackHandler}
               ToggleFavourite = {ToggleFavourite}
+          />
+
+          <View style = {styles.FooterInfoArea}>
+            <Text style = {styles.InfoTitle}>Description</Text>
+
+            {fullDesc ? (
+              <TouchableWithoutFeedback onPress = {() => {
+                setfullDesc(prev => !prev);
+              }}>
+                <Text style = {styles.DescriptionText}>{ItemOfIndex.description}</Text>
+
+              </TouchableWithoutFeedback>
+
+            ) : (
+
+              <TouchableWithoutFeedback onPress = {() => {
+                setfullDesc(prev => !prev);
+              }}>
+                <Text 
+                  numberOfLines = {3} 
+                  style = {styles.DescriptionText}>
+                    
+                  {ItemOfIndex.description}
+                </Text>
+              </TouchableWithoutFeedback>
+            )}
+            <Text style = {styles.InfoTitle}>Size</Text>
+
+            
+            <View style = {styles.SizeOuterContainer}>
+              {ItemOfIndex.prices.map((data: any) => (
+                  <TouchableOpacity 
+                      key = {data.size}
+                      onPress = {() => {
+                        setPrice(data);
+                      }}
+                      style = {[styles.SizeBox, {
+                        borderColor: 
+                          data.size == price.size 
+                              ? COLORS.primaryOrangeHex 
+                              : COLORS.primaryDarkGreyHex
+                      }]}
+                      >
+                        <Text style = {[
+                          styles.SizeText,
+                          {
+                            fontSize: 
+                                ItemOfIndex.type == 'bean' 
+                                  ? FONTSIZE.size_14
+                                  : FONTSIZE.size_16,
+
+                            color: 
+                                data.size == price.size
+                                  ? COLORS.primaryOrangeHex
+                                  : COLORS.secondaryLightGreyHex,
+
+                          },
+
+                          
+                          ]}>{data.size}</Text>
+                  </TouchableOpacity>
+              ))}
+          </View>
+          </View>
+
+          <PaymentFooter 
+              price = {price}
+              buttonTitle = "Add to Cart"
+              buttonPressHandler = {() => {}}
           />
 
         </ScrollView>
@@ -60,7 +135,50 @@ const styles = StyleSheet.create({
 
     ScrollViewFlex: {
       flexGrow: 1,
-    }
+      justifyContent: 'space-between',
+    },
 
+    FooterInfoArea: {
+      padding: SPACING.space_20,
+    },
+
+    InfoTitle: {
+      color: COLORS.primaryWhiteHex,
+      fontFamily: FONTFAMILY.poppins_semibold,
+      fontSize: FONTSIZE.size_16,
+      marginBottom: SPACING.space_10,
+    },
+
+    DescriptionText: {
+      color: COLORS.primaryWhiteHex,
+      letterSpacing: 0.5,
+      fontFamily: FONTFAMILY.poppins_regular,
+      fontSize: FONTSIZE.size_14,
+      marginBottom: SPACING.space_30,
+    },
+
+    SizeOuterContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      gap: SPACING.space_20,
+      justifyContent: 'space-between',
+    },
+
+    SizeBox: {
+      flex: 1,
+      backgroundColor: COLORS.primaryDarkGreyHex,
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: SPACING.space_24 * 2,
+      borderRadius: BORDERRADIUS.radius_20,
+      borderWidth: 2,
+    },
+
+    SizeText: {
+      fontFamily: FONTFAMILY.poppins_medium,
+
+    },
+
+    
 
 })
