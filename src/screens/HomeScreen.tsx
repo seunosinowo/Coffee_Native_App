@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, Text, View, ScrollView, Touchable, TouchableOpacity, TextInput, FlatList, Animated, Dimensions } from 'react-native'
+import { StatusBar, StyleSheet, Text, View, ScrollView, Touchable, TouchableOpacity, TextInput, FlatList, Animated, Dimensions, ToastAndroid } from 'react-native'
 import React, { useRef, useState } from 'react'
 import { useStore } from '../store/store'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -31,11 +31,15 @@ const getCoffeeList = (category: string, data: any ) => {
     let coffeelist = data.filter((item: any) => item.name == category);
     return coffeelist;
   };
-};
+}; 
 
-const HomeScreen = ({navigation}: any) => {
+const HomeScreen = ({navigation}: any) => { 
   const CoffeeList = useStore ((state: any) => state.CoffeeList)
   const BeanList = useStore((state: any) => state.BeanList)
+
+  const addToCart = useStore((state: any) => state.addToCart);
+  const calculateCartPrice = useStore((state: any) => state. calculateCartPrice);
+  
   const [categories, setCategories] = useState(
     getCategoriesFromData(CoffeeList),
   );
@@ -75,7 +79,38 @@ const HomeScreen = ({navigation}: any) => {
     setCategoryIndex({index: 0, category: categories[0]});
     setSortedCoffee([...CoffeeList]);
     setSearchText('');
-  }
+  };
+
+  //addToCarthandler
+  const CoffeeCardAddToCart  = ({
+    id, 
+    index, 
+    name, 
+    roasted,
+    imagelink_portrait,
+    special_ingredient,
+    type,
+    prices,
+  }: any) => {
+    addToCart({
+      id, 
+      index, 
+      name, 
+      roasted,
+      imagelink_portrait,
+      special_ingredient,
+      type,
+      prices,
+    });
+    
+
+    calculateCartPrice(); 
+      ToastAndroid.showWithGravity(
+        `${name} is added to Cart`,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );    
+  };
 
   
   return (
@@ -201,13 +236,13 @@ const HomeScreen = ({navigation}: any) => {
                               id = {item.id}
                               index = {item.index}
                               type = {item.type}
-                              rosted = {item.rosted}
+                              roasted = {item.roasted}
                               imagelink_square = {item.imagelink_square}
                               name = {item.name}
                               special_ingredient = {item.special_ingredient}
                               average_rating = {item.average_rating}
                               price = {item.prices[2]}
-                              buttonPressHandler = {() => {}}
+                              buttonPressHandler = {CoffeeCardAddToCart}
                           />
                       </TouchableOpacity>
                 );
@@ -240,13 +275,13 @@ const HomeScreen = ({navigation}: any) => {
                               id = {item.id}
                               index = {item.index}
                               type = {item.type}
-                              rosted = {item.rosted}
+                              roasted = {item.roasted}
                               imagelink_square = {item.imagelink_square}
                               name = {item.name}
                               special_ingredient = {item.special_ingredient}
                               average_rating = {item.average_rating}
                               price = {item.prices[2]}
-                              buttonPressHandler = {() => {}}
+                              buttonPressHandler = {CoffeeCardAddToCart}
                           />
                       </TouchableOpacity>
                 );
